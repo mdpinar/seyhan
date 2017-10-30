@@ -70,10 +70,10 @@ public class TCMBExchanges {
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Element element = (Element) nodes.item(i);
 
-				if (getDouble(getElementValue(element, "ForexBuying")) == 0d 
-					|| getDouble(getElementValue(element, "ForexSelling")) == 0d
-					|| getDouble(getElementValue(element, "BanknoteBuying")) == 0d
-					|| getDouble(getElementValue(element, "BanknoteSelling")) == 0d) continue;
+				if (checkDoubleIsEqual(element, "ForexBuying", 0d)
+					|| checkDoubleIsEqual(element, "ForexSelling", 0d)
+					|| checkDoubleIsEqual(element, "BanknoteBuying", 0d)
+					|| checkDoubleIsEqual(element, "BanknoteSelling", 0d)) continue;
 
 				TCMBRate rate = new TCMBRate();
 
@@ -81,10 +81,10 @@ public class TCMBExchanges {
 
 				rate.setCode(element.getAttribute("Kod"));
 				rate.setName(getElementValue(element, "Isim"));
-				rate.setExcBuying(getDouble(getElementValue(element, "ForexBuying")));
-				rate.setExcSelling(getDouble(getElementValue(element, "ForexSelling")));
-				rate.setEffBuying(getDouble(getElementValue(element, "BanknoteBuying")));
-				rate.setEffSelling(getDouble(getElementValue(element, "BanknoteSelling")));
+				rate.setExcBuying(getElementsDoubleValue(element, "ForexBuying"));
+				rate.setExcSelling(getElementsDoubleValue(element, "ForexSelling"));
+				rate.setEffBuying(getElementsDoubleValue(element, "BanknoteBuying"));
+				rate.setEffSelling(getElementsDoubleValue(element, "BanknoteSelling"));
 
 				result.add(rate);
 			}
@@ -122,5 +122,12 @@ public class TCMBExchanges {
 		return getCharacterDataFromElement((Element) parent
 				.getElementsByTagName(label).item(0));
 	}
-
+	
+	private static double getElementsDoubleValue(Element element, String tag) {
+		return getDouble(getElementValue(element, tag));
+	}
+	
+	private static boolean checkDoubleIsEqual(Element el, String tag, double val) {
+		return getElementsDoubleValue(element, tag) == val;
+	}
 }
